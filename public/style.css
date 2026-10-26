@@ -1,0 +1,99 @@
+/*
+Author: Ahmed Ali
+Student Number: 000824753
+Email: 000824753@mohawkcollege.ca
+Date: 2026-10-26
+
+I, Ahmed Ali, 000824753 certify that this material is my original work.
+No other person's work has been used without due acknowledgement.
+*/
+
+/* Noir look: black and white film, typewriter text, one red stamp colour */
+:root {
+  --ink: #e8e4d8;
+  --dim: #9a968c;
+  --paper: #121212;
+  --card: #1c1c1c;
+  --line: #3a3a3a;
+  --red: #b3202a;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  /* Light through window blinds */
+  background-image: repeating-linear-gradient(
+    -25deg,
+    rgba(255, 255, 255, 0.035) 0 40px,
+    transparent 40px 90px
+  );
+  background-attachment: fixed;
+}
+
+h1, h2, h3, nav, button, .stamp, th, label {
+  font-family: "Special Elite", "Courier New", monospace;
+}
+
+a { color: var(--ink); }
+
+header {
+  border-bottom: 2px solid var(--line);
+  padding: 20px 16px 12px;
+  text-align: center;
+}
+
+header h1 { margin: 0; font-size: 2.4rem; letter-spacing: 2px; }
+header h1 a { text-decoration: none; }
+.tagline { margin: 4px 0 12px; color: var(--dim); font-style: italic; }
+
+nav a { margin: 0 10px; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+nav a:hover { color: #fff; border-bottom-color: #fff; }
+
+main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+
+footer { text-align: center; color: var(--dim); padding: 24px 16px; font-size: 0.9rem; }
+
+/* Case file tables */
+table { width: 100%; border-collapse: collapse; background: var(--card); }
+th, td { padding: 10px; border-bottom: 1px solid var(--line); text-align: left; }
+th { color: var(--dim); text-transform: uppercase; font-size: 0.85rem; }
+tr:hover td { background: #242424; }
+
+/* Forms and buttons */
+form.stacked { display: grid; gap: 12px; max-width: 420px; }
+input, select {
+  padding: 8px;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font: inherit;
+}
+button {
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  cursor: pointer;
+}
+button:hover { background: #fff; }
+button.danger { background: var(--red); color: var(--ink); }
+
+/* Red rubber stamp */
+.stamp {
+  display: inline-block;
+  color: var(--red);
+  border: 3px solid var(--red);
+  padding: 6px 14px;
+  transform: rotate(-4deg);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.error { color: var(--red); }
+
+@media (max-width: 600px) {
+  header h1 { font-size: 1.8rem; }
+  th, td { padding: 6px; font-size: 0.9rem; }
+}
