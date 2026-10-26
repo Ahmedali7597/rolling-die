@@ -55,7 +55,12 @@ main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
 
 footer { text-align: center; color: var(--dim); padding: 24px 16px; font-size: 0.9rem; }
 
-/* Case file tables */
+/* Search bar */
+form.search { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 20px; }
+form.search input { flex: 1; min-width: 200px; }
+
+/* Case file tables. The wrapper scrolls sideways on small phones. */
+.table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; background: var(--card); }
 th, td { padding: 10px; border-bottom: 1px solid var(--line); text-align: left; }
 th { color: var(--dim); text-transform: uppercase; font-size: 0.85rem; }
@@ -90,6 +95,8 @@ button.danger { background: var(--red); color: var(--ink); }
   text-transform: uppercase;
   letter-spacing: 2px;
 }
+
+.stamp.small { padding: 2px 8px; border-width: 2px; font-size: 0.8rem; letter-spacing: 1px; }
 
 .error { color: var(--red); }
 

@@ -9,8 +9,28 @@ No other person's work has been used without due acknowledgement.
 */
 
 // Public inventory page. Read only, no login needed.
-// Empty list until the database is hooked up.
 
-exports.showInventory = function (req, res) {
-  res.render("inventory", { games: [] });
+const gameModel = require("../models/gameModel");
+
+// Mustache can't format numbers, so the display text is built here
+function addDisplayFields(game) {
+  game.priceText = game.price.toFixed(2);
+  game.players = game.min_players === game.max_players
+    ? String(game.min_players)
+    : game.min_players + "–" + game.max_players;
+  return game;
+}
+
+exports.showInventory = async function (req, res) {
+  const search = String(req.query.search || "").trim();
+
+  const games = search
+    ? await gameModel.searchGames(search)
+    : await gameModel.getAllGames();
+
+  res.render("inventory", {
+    search: search,
+    hasGames: games.length > 0,
+    games: games.map(addDisplayFields),
+  });
 };

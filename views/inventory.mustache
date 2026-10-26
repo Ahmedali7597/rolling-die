@@ -13,7 +13,41 @@ Public inventory page. Read only, with no edit buttons.
 <h2>The Evidence Locker</h2>
 <p>Every game we carry, filed and accounted for.</p>
 
-{{^games}}
-  <p class="stamp">No case files yet</p>
-{{/games}}
+<form method="get" action="/" class="search">
+  <input type="search" name="search" value="{{search}}" placeholder="Title or category, like Catan or Mystery" aria-label="Search games">
+  <button type="submit">Investigate</button>
+  {{#search}}<a href="/">Clear</a>{{/search}}
+</form>
+
+{{#hasGames}}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Players</th>
+        <th>Price</th>
+        <th>On the shelf</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#games}}
+      <tr>
+        <td>{{title}}</td>
+        <td>{{category}}</td>
+        <td>{{players}}</td>
+        <td>${{priceText}}</td>
+        <td>{{#stock}}{{stock}}{{/stock}}{{^stock}}<span class="stamp small">Gone missing</span>{{/stock}}</td>
+      </tr>
+      {{/games}}
+    </tbody>
+  </table>
+</div>
+{{/hasGames}}
+
+{{^hasGames}}
+  {{#search}}<p class="stamp">No leads on "{{search}}"</p>{{/search}}
+  {{^search}}<p class="stamp">No case files yet</p>{{/search}}
+{{/hasGames}}
 {{> footer}}

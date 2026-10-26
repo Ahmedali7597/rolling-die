@@ -19,4 +19,14 @@ async function getAllGames() {
   return db.all("SELECT * FROM games ORDER BY title");
 }
 
-module.exports = { getAllGames };
+// Partial, case-insensitive match on title or category, so "myst" finds the Mystery games
+async function searchGames(term) {
+  const db = await getDb();
+  const pattern = "%" + term + "%";
+  return db.all(
+    "SELECT * FROM games WHERE title LIKE ? OR category LIKE ? ORDER BY title",
+    [pattern, pattern]
+  );
+}
+
+module.exports = { getAllGames, searchGames };
