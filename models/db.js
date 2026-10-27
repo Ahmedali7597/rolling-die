@@ -51,6 +51,15 @@ async function setup() {
     )
   `);
 
+  // Staff accounts. The password column holds "salt:hash", never the real password.
+  await db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id       INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT    NOT NULL UNIQUE COLLATE NOCASE,
+      password TEXT    NOT NULL
+    )
+  `);
+
   const row = await db.get("SELECT COUNT(*) AS count FROM games");
   if (row.count === 0) {
     for (const game of sampleGames) {

@@ -25,6 +25,13 @@ Shared top of every page, included as a partial.
     <p class="tagline">Every game has a story. Every copy has an alibi.</p>
     <nav>
       <a href="/">Evidence Locker</a>
+      {{#user}}
+        <a href="/manager">Back Office</a>
+        <form method="post" action="/logout" class="inline">
+          <button type="submit" class="link">Log out</button>
+        </form>
+      {{/user}}
+      {{^user}}<a href="/login">Staff Login</a>{{/user}}
     </nav>
   </header>
   <main>

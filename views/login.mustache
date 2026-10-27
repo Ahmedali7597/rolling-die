@@ -7,5 +7,21 @@ Date: 2026-10-26
 I, Ahmed Ali, 000824753 certify that this material is my original work.
 No other person's work has been used without due acknowledgement.
 
-Staff login form. To be filled in later.
+Staff login form.
 }}
+{{> header}}
+<h2>Staff Only</h2>
+<p>Show your badge to get into the back office.</p>
+
+{{#error}}<p class="error">{{error}}</p>{{/error}}
+
+<form method="post" action="/login" class="stacked">
+  <label for="username">Username</label>
+  <input id="username" name="username" value="{{username}}" autocomplete="username" required>
+
+  <label for="password">Password</label>
+  <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+  <button type="submit">Log in</button>
+</form>
+{{> footer}}
