@@ -29,6 +29,17 @@ async function searchGames(term) {
   );
 }
 
+// For the Discord bot. An exact title wins (the column ignores capitals).
+// Otherwise up to 5 titles that contain the text, so "ticket" finds Ticket to Ride.
+async function findGamesByTitle(title) {
+  const db = await getDb();
+  const exact = await db.get("SELECT * FROM games WHERE title = ?", [title]);
+  if (exact) {
+    return [exact];
+  }
+  return db.all("SELECT * FROM games WHERE title LIKE ? ORDER BY title LIMIT 5", ["%" + title + "%"]);
+}
+
 async function getGameById(id) {
   const db = await getDb();
   return db.get("SELECT * FROM games WHERE id = ?", [id]);
@@ -58,6 +69,7 @@ async function deleteGame(id) {
 module.exports = {
   getAllGames,
   searchGames,
+  findGamesByTitle,
   getGameById,
   addGame,
   updateGame,

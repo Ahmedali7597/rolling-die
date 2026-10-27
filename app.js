@@ -8,7 +8,7 @@ I, Ahmed Ali, 000824753 certify that this material is my original work.
 No other person's work has been used without due acknowledgement.
 */
 
-// Entry point. Runs the web server, and later the Discord bot in the same process.
+// Entry point. Runs the web server and the Discord bot in the same process.
 
 // Loads DISCORD_TOKEN and the other secrets from .env into process.env
 process.loadEnvFile();
@@ -20,6 +20,8 @@ const getDb = require("./models/db");
 const userModel = require("./models/userModel");
 const inventoryController = require("./controllers/inventoryController");
 const managerController = require("./controllers/managerController");
+const { Client, GatewayIntentBits, Events, MessageFlags } = require("discord.js");
+const commands = require("./bot/commands");
 
 const app = express();
 
@@ -62,6 +64,32 @@ app.get("/manager/games/:id/edit", managerController.showEditForm);
 app.post("/manager/games/:id/edit", managerController.updateGame);
 app.post("/manager/games/:id/delete", managerController.deleteGame);
 
+// ----- Discord bot -----
+// Slash commands only need the Guilds intent. The bot never reads normal chat messages.
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+client.once(Events.ClientReady, function () {
+  console.log("Bot is online as " + client.user.tag);
+});
+
+client.on(Events.InteractionCreate, async function (interaction) {
+  if (!interaction.isChatInputCommand()) {
+    return;
+  }
+  try {
+    await commands.handleCommand(interaction);
+  } catch (err) {
+    console.error("/" + interaction.commandName + " failed:", err);
+    // Only the person who asked sees this message
+    if (!interaction.replied) {
+      await interaction.reply({
+        content: "The files are jammed. Give it a minute and ask again.",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+  }
+});
+
 // The database and the first staff account are set up before the server starts
 getDb()
   .then(function () {
@@ -71,4 +99,5 @@ getDb()
     app.listen(3000, function () {
       console.log("The Rolling Die is open at http://localhost:3000");
     });
+    return client.login(process.env.DISCORD_TOKEN);
   });

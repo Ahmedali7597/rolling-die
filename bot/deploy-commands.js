@@ -9,4 +9,23 @@ No other person's work has been used without due acknowledgement.
 */
 
 // Registers the slash commands with Discord (npm run deploy).
-// To be filled in later.
+// Commands are registered to one server (GUILD_ID), which makes changes show up
+// right away. Global commands can take up to an hour to appear.
+
+process.loadEnvFile(__dirname + "/../.env");
+
+const { REST, Routes } = require("discord.js");
+const { definitions } = require("./commands");
+
+const rest = new REST().setToken(process.env.DISCORD_TOKEN);
+
+rest
+  .put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
+    body: definitions.map((command) => command.toJSON()),
+  })
+  .then(function (saved) {
+    console.log("Registered " + saved.length + " commands: " + saved.map((c) => "/" + c.name).join(", "));
+  })
+  .catch(function (err) {
+    console.error("Could not register commands:", err.message);
+  });
