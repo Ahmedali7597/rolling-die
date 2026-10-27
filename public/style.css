@@ -96,6 +96,22 @@ button {
 }
 button:hover { background: #fff; }
 button.danger { background: var(--red); color: var(--ink); }
+button.small { padding: 4px 10px; font-size: 0.85rem; }
+
+/* A link that looks like a button */
+a.button {
+  display: inline-block;
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  font-family: "Special Elite", "Courier New", monospace;
+}
+a.button:hover { background: #fff; }
+
+/* Edit and Delete side by side in the manager table */
+td.actions { white-space: nowrap; }
+td.actions a { margin-right: 10px; }
 
 /* Red rubber stamp */
 .stamp {

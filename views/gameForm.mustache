@@ -7,5 +7,35 @@ Date: 2026-10-26
 I, Ahmed Ali, 000824753 certify that this material is my original work.
 No other person's work has been used without due acknowledgement.
 
-One form used for both adding and editing a game. To be filled in later.
+One form used for both adding and editing a game. The controller sets the heading and where it posts.
 }}
+{{> header}}
+<h2>{{heading}}</h2>
+
+{{#error}}<p class="error">{{error}}</p>{{/error}}
+
+<form method="post" action="{{action}}" class="stacked">
+  <label for="title">Title</label>
+  <input id="title" name="title" value="{{game.title}}" maxlength="100" required>
+
+  <label for="category">Category</label>
+  <input id="category" name="category" value="{{game.category}}" maxlength="50" placeholder="Strategy, Family, Party, Mystery..." required>
+
+  <label for="price">Price ($)</label>
+  <input id="price" name="price" type="number" min="0" step="0.01" value="{{game.price}}" required>
+
+  <label for="stock">Copies in stock</label>
+  <input id="stock" name="stock" type="number" min="0" step="1" value="{{game.stock}}" required>
+
+  <label for="min_players">Min players</label>
+  <input id="min_players" name="min_players" type="number" min="1" step="1" value="{{game.min_players}}" required>
+
+  <label for="max_players">Max players</label>
+  <input id="max_players" name="max_players" type="number" min="1" step="1" value="{{game.max_players}}" required>
+
+  <p>
+    <button type="submit">File it</button>
+    <a href="/manager">Cancel</a>
+  </p>
+</form>
+{{> footer}}

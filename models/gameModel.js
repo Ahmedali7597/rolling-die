@@ -29,4 +29,37 @@ async function searchGames(term) {
   );
 }
 
-module.exports = { getAllGames, searchGames };
+async function getGameById(id) {
+  const db = await getDb();
+  return db.get("SELECT * FROM games WHERE id = ?", [id]);
+}
+
+async function addGame(game) {
+  const db = await getDb();
+  await db.run(
+    "INSERT INTO games (title, category, price, stock, min_players, max_players) VALUES (?, ?, ?, ?, ?, ?)",
+    [game.title, game.category, game.price, game.stock, game.min_players, game.max_players]
+  );
+}
+
+async function updateGame(id, game) {
+  const db = await getDb();
+  await db.run(
+    "UPDATE games SET title = ?, category = ?, price = ?, stock = ?, min_players = ?, max_players = ? WHERE id = ?",
+    [game.title, game.category, game.price, game.stock, game.min_players, game.max_players, id]
+  );
+}
+
+async function deleteGame(id) {
+  const db = await getDb();
+  await db.run("DELETE FROM games WHERE id = ?", [id]);
+}
+
+module.exports = {
+  getAllGames,
+  searchGames,
+  getGameById,
+  addGame,
+  updateGame,
+  deleteGame,
+};

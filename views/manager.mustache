@@ -7,9 +7,43 @@ Date: 2026-10-26
 I, Ahmed Ali, 000824753 certify that this material is my original work.
 No other person's work has been used without due acknowledgement.
 
-Manager home. The game list with edit and delete buttons is to be filled in later.
+Manager home: every game with edit and delete buttons.
 }}
 {{> header}}
 <h2>The Back Office</h2>
-<p>Welcome back, {{user}}.</p>
+<p>Welcome back, {{user}}. Every case file is open for edits here.</p>
+
+<p><a href="/manager/games/new" class="button">+ New case file</a></p>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Players</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#games}}
+      <tr>
+        <td>{{title}}</td>
+        <td>{{category}}</td>
+        <td>{{players}}</td>
+        <td>${{priceText}}</td>
+        <td>{{stock}}</td>
+        <td class="actions">
+          <a href="/manager/games/{{id}}/edit">Edit</a>
+          <form method="post" action="/manager/games/{{id}}/delete" class="inline" onsubmit="return confirm('Delete this game for good?');">
+            <button type="submit" class="danger small">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {{/games}}
+    </tbody>
+  </table>
+</div>
 {{> footer}}

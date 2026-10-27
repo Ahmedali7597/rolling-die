@@ -34,3 +34,6 @@ exports.showInventory = async function (req, res) {
     games: games.map(addDisplayFields),
   });
 };
+
+// The manager page shows prices the same way
+exports.addDisplayFields = addDisplayFields;

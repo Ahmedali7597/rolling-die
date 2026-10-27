@@ -53,8 +53,14 @@ app.get("/login", managerController.showLogin);
 app.post("/login", managerController.login);
 app.post("/logout", managerController.logout);
 
-// Staff only
-app.get("/manager", managerController.requireLogin, managerController.showManager);
+// Staff only. This one line guards every URL that starts with /manager.
+app.use("/manager", managerController.requireLogin);
+app.get("/manager", managerController.showManager);
+app.get("/manager/games/new", managerController.showAddForm);
+app.post("/manager/games", managerController.addGame);
+app.get("/manager/games/:id/edit", managerController.showEditForm);
+app.post("/manager/games/:id/edit", managerController.updateGame);
+app.post("/manager/games/:id/delete", managerController.deleteGame);
 
 // The database and the first staff account are set up before the server starts
 getDb()
