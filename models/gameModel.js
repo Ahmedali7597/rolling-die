@@ -40,6 +40,15 @@ async function findGamesByTitle(title) {
   return db.all("SELECT * FROM games WHERE title LIKE ? ORDER BY title LIMIT 5", ["%" + title + "%"]);
 }
 
+// Games that work with exactly this many people at the table
+async function findGamesForPlayers(count) {
+  const db = await getDb();
+  return db.all(
+    "SELECT * FROM games WHERE min_players <= ? AND max_players >= ? ORDER BY stock = 0, title",
+    [count, count]
+  );
+}
+
 async function getGameById(id) {
   const db = await getDb();
   return db.get("SELECT * FROM games WHERE id = ?", [id]);
@@ -70,6 +79,7 @@ module.exports = {
   getAllGames,
   searchGames,
   findGamesByTitle,
+  findGamesForPlayers,
   getGameById,
   addGame,
   updateGame,
