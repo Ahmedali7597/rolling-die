@@ -7,5 +7,83 @@ Date: 2026-10-26
 I, Ahmed Ali, 000824753 certify that this material is my original work.
 No other person's work has been used without due acknowledgement.
 
-"The Wiretap": live feed of bot activity over socket.io. To be filled in later.
+"The Wiretap": live feed of bot activity over socket.io. New rows appear without a page refresh.
 }}
+{{> header}}
+<h2>The Wiretap</h2>
+<p>Every question the Discord bot answers shows up here as it happens.</p>
+
+<p id="status" class="wire-status">Connecting...</p>
+
+<div class="tally">
+  <span>/stock <b id="count-stock">0</b></span>
+  <span>/price <b id="count-price">0</b></span>
+  <span>/players <b id="count-players">0</b></span>
+  <span>/compare <b id="count-compare">0</b></span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Who</th>
+        <th>Command</th>
+        <th>Asked about</th>
+        <th>Bot answered</th>
+      </tr>
+    </thead>
+    <tbody id="feed">
+      <tr id="empty"><td colspan="5">Quiet so far. The line is open.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const statusLine = document.getElementById("status");
+
+  socket.on("connect", function () {
+    statusLine.textContent = "Line is live. Listening for bot activity.";
+    statusLine.className = "wire-status live";
+  });
+  socket.on("disconnect", function () {
+    statusLine.textContent = "Line went dead. Reconnecting...";
+    statusLine.className = "wire-status dead";
+  });
+  socket.on("connect_error", function () {
+    statusLine.textContent = "Can't connect. The session may have ended, so try logging in again.";
+    statusLine.className = "wire-status dead";
+  });
+
+  socket.on("botactivity", function (event) {
+    const empty = document.getElementById("empty");
+    if (empty) {
+      empty.remove();
+    }
+
+    // textContent keeps names and searches as plain text, never HTML
+    const row = document.createElement("tr");
+    row.className = "new";
+    const cells = [
+      new Date(event.time).toLocaleTimeString(),
+      event.user,
+      "/" + event.command,
+      event.args,
+      event.answer,
+    ];
+    for (const text of cells) {
+      const cell = document.createElement("td");
+      cell.textContent = text;
+      row.appendChild(cell);
+    }
+    document.getElementById("feed").prepend(row);
+
+    const counter = document.getElementById("count-" + event.command);
+    if (counter) {
+      counter.textContent = Number(counter.textContent) + 1;
+    }
+  });
+</script>
+{{> footer}}

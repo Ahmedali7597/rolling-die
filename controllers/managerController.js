@@ -8,8 +8,8 @@ I, Ahmed Ali, 000824753 certify that this material is my original work.
 No other person's work has been used without due acknowledgement.
 */
 
-// Manager area: login, logout, and adding, editing and deleting games.
-// The live dashboard is to be filled in later.
+// Manager area: login, logout, adding, editing and deleting games,
+// and the live dashboard of bot activity.
 
 const userModel = require("../models/userModel");
 const gameModel = require("../models/gameModel");
@@ -57,6 +57,11 @@ exports.logout = function (req, res) {
   req.session.destroy(function () {
     res.redirect("/");
   });
+};
+
+// The page starts empty. Rows arrive over socket.io as the bot gets used.
+exports.showDashboard = function (req, res) {
+  res.render("dashboard");
 };
 
 // ----- Games -----
