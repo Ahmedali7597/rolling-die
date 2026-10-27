@@ -41,6 +41,16 @@ const definitions = [
         .setMinValue(1)
         .setMaxValue(30)
     ),
+
+  new SlashCommandBuilder()
+    .setName("compare")
+    .setDescription("Two games side by side: price, players and stock")
+    .addStringOption((option) =>
+      option.setName("first").setDescription("First game title").setRequired(true)
+    )
+    .addStringOption((option) =>
+      option.setName("second").setDescription("Second game title").setRequired(true)
+    ),
 ];
 
 // Discord caps a message at 2000 characters, so long lists get cut short
@@ -95,6 +105,39 @@ const handlers = {
       lines.push("...and " + (games.length - MAX_LINES) + " more on the website.");
     }
     return "Games for " + group + ":\n" + lines.join("\n");
+  },
+
+  compare: async function (interaction) {
+    const firstTitle = interaction.options.getString("first");
+    const secondTitle = interaction.options.getString("second");
+
+    // Best match for each name (exact title, or the first partial match)
+    const [a] = await gameModel.findGamesByTitle(firstTitle);
+    const [b] = await gameModel.findGamesByTitle(secondTitle);
+    if (!a) {
+      return notFound(firstTitle);
+    }
+    if (!b) {
+      return notFound(secondTitle);
+    }
+    if (a.id === b.id) {
+      return "Both names point to **" + a.title + "**. A comparison needs two different games.";
+    }
+
+    const shelf = (game) => (game.stock > 0 ? game.stock + " on the shelf" : "gone missing");
+    const gap = Math.abs(a.price - b.price).toFixed(2);
+    const priceNote =
+      a.price === b.price
+        ? "Same price."
+        : (a.price < b.price ? a.title : b.title) + " is $" + gap + " cheaper.";
+
+    return [
+      "**" + a.title + "** vs **" + b.title + "**",
+      "Price: $" + a.price.toFixed(2) + " vs $" + b.price.toFixed(2) + ". " + priceNote,
+      "Players: " + a.min_players + "–" + a.max_players + " vs " + b.min_players + "–" + b.max_players,
+      "Category: " + a.category + " vs " + b.category,
+      "Stock: " + shelf(a) + " vs " + shelf(b),
+    ].join("\n");
   },
 };
 
