@@ -1,0 +1,11 @@
+## [2026-10-26 - 22:54]
+- **Prompt:** From now on, maintain an automatic timestamped session record in `ai_log.txt` at the repository root, appending entries for each prompt response or significant step.
+- **Action/Result:** Created this log and recorded the request. I will append entries proactively as we continue in this chat.
+
+## [2026-10-27 - 22:56]
+- **Prompt:** Create `bug.md` listing all bugs from the supplied development notes.
+- **Action/Result:** Added `bug.md` documenting the SQLite install-script issue, the empty-login server error, and the test script that deleted the wrong game; noted their resolutions and the successful websocket access check. Confirmed the repository-local `.git/info/exclude` rule `*.md` currently hides `bug.md` from Git status.
+
+## [2026-10-27 - 23:03]
+- **Prompt:** Stage and push `bg.md` and `ai_log.txt`.
+- **Action/Result:** Interpreted `bg.md` as `bug.md`, the file created in the previous step. Preparing to stage only those two files and push the resulting commit.
